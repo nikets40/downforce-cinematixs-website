@@ -1,26 +1,266 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --void-black: #080808;
+  --studio-white: #f0f0f0;
+  --brushed-silver: #b0b4b8;
+  --chrome: #d4d8dc;
+  --pure-black: #000000;
+  --hairline: rgba(255, 255, 255, 0.08);
+  --hairline-bright: rgba(255, 255, 255, 0.15);
+
+  --font-barlow: "Barlow Condensed", sans-serif;
+  --font-dm-sans: "DM Sans", sans-serif;
+  --font-cormorant: "Cormorant Garamond", serif;
+  --font-roboto-mono: "Roboto Mono", monospace;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-void: var(--void-black);
+  --color-studio: var(--studio-white);
+  --color-silver: var(--brushed-silver);
+  --color-chrome: var(--chrome);
+  --color-pure: var(--pure-black);
+  --color-hairline: var(--hairline);
+  --font-family-barlow: var(--font-barlow);
+  --font-family-dm: var(--font-dm-sans);
+  --font-family-cormorant: var(--font-cormorant);
+  --font-family-mono: var(--font-roboto-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  cursor: none;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--void-black);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--void-black);
+  color: var(--studio-white);
+  font-family: var(--font-dm-sans), sans-serif;
+  overflow-x: hidden;
+}
+
+/* ── Film Grain Overlay ──────────────────────────────── */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 1;
+}
+
+.grain-overlay svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* ── Scrollbar ───────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: var(--pure-black);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--brushed-silver);
+  border-radius: 2px;
+}
+
+/* ── Text Selection ──────────────────────────────────── */
+::selection {
+  background: var(--brushed-silver);
+  color: var(--pure-black);
+}
+
+/* ── Hairline Border ─────────────────────────────────── */
+.hairline {
+  border: 1px solid var(--hairline);
+}
+
+.hairline-bright {
+  border: 1px solid var(--hairline-bright);
+}
+
+/* ── Skeleton Shimmer ────────────────────────────────── */
+@keyframes shimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.03) 0%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.03) 100%
+  );
+  background-size: 800px 100%;
+  animation: shimmer 1.8s infinite;
+}
+
+/* ── Animations ─────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(32px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes marqueeLeft {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes marqueeRight {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.3; transform: scale(0.6); }
+}
+
+@keyframes progressFill {
+  from { width: 0%; }
+  to   { width: 100%; }
+}
+
+@keyframes drawLine {
+  from { stroke-dashoffset: 1000; }
+  to   { stroke-dashoffset: 0; }
+}
+
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shutterOpen {
+  0%   { clip-path: inset(0 50% 0 50%); opacity: 1; }
+  50%  { clip-path: inset(0 0% 0 0%); opacity: 1; }
+  100% { clip-path: inset(0 0% 0 0%); opacity: 0; }
+}
+
+@keyframes statusPulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(255,255,255,0.4); }
+  50%       { opacity: 0.7; box-shadow: 0 0 0 4px rgba(255,255,255,0); }
+}
+
+@keyframes filmStripShift {
+  0%   { transform: translateX(0); }
+  25%  { transform: translateX(-72px); }
+  50%  { transform: translateX(-144px); }
+  75%  { transform: translateX(-216px); }
+  100% { transform: translateX(0); }
+}
+
+/* ── Utility Classes ─────────────────────────────────── */
+.font-barlow   { font-family: var(--font-barlow); }
+.font-dm       { font-family: var(--font-dm-sans); }
+.font-cormorant { font-family: var(--font-cormorant); }
+.font-mono     { font-family: var(--font-roboto-mono); }
+
+.text-void     { color: var(--void-black); }
+.text-studio   { color: var(--studio-white); }
+.text-silver   { color: var(--brushed-silver); }
+.text-chrome   { color: var(--chrome); }
+
+.bg-void       { background-color: var(--void-black); }
+.bg-studio     { background-color: var(--studio-white); }
+.bg-pure       { background-color: var(--pure-black); }
+
+.border-hairline   { border-color: var(--hairline); }
+.border-hairline-bright { border-color: var(--hairline-bright); }
+
+/* ── Button Styles ───────────────────────────────────── */
+.btn-primary {
+  position: relative;
+  overflow: hidden;
+  background: var(--studio-white);
+  color: var(--void-black);
+  font-family: var(--font-barlow);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--void-black);
+  transform: translateX(-101%);
+  transition: transform 0.4s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.btn-primary:hover::before {
+  transform: translateX(0);
+}
+
+.btn-primary:hover {
+  color: var(--studio-white);
+}
+
+.btn-primary span {
+  position: relative;
+  z-index: 1;
+}
+
+.btn-outline {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--brushed-silver);
+  color: var(--brushed-silver);
+  font-family: var(--font-barlow);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: transparent;
+  transition: color 0.3s ease;
+}
+
+.btn-outline::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--studio-white);
+  transform: translateX(-101%);
+  transition: transform 0.4s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.btn-outline:hover::before {
+  transform: translateX(0);
+}
+
+.btn-outline:hover {
+  color: var(--void-black);
+}
+
+.btn-outline span {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Card Panel ──────────────────────────────────────── */
+.card-panel {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--hairline);
+  border-radius: 1.5rem;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* ── Focus States ─────────────────────────────────────── */
+:focus-visible {
+  outline: 1px solid var(--brushed-silver);
+  outline-offset: 2px;
 }
